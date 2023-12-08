@@ -94,26 +94,34 @@ function Menu({ navigation }) {
               navigation.navigate('Stats');
             }}
           >
-             <Image
+            <Image
               source={require('../assets/menu/stats.png')}
               style={styles.icon}
-            ></Image>
-            <Text>Stats</Text>
+            ></Image>      
           </TouchableOpacity>
         </View>
 
         <View style={styles.quiz}>
-        <Image
-              source={require('../assets/menu/profile.png')}
-              style={styles.icon}
-            ></Image>
+          <Image
+            source={require('../assets/menu/profile.png')}
+            style={styles.icon}
+          ></Image>
+          <Text>Profile</Text>
         </View>
 
         <View style={styles.quiz}>
-        <Image
-              source={require('../assets/menu/settings.png')}
-              style={styles.icon}
-            ></Image>
+        <TouchableOpacity
+            onPress={() => {
+              console.log('Navigating to Quiz');
+              navigation.navigate('Settings');
+            }}
+          >
+          <Image
+            source={require('../assets/menu/settings.png')}
+            style={styles.icon}
+          ></Image>
+          <Text>Settings</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -182,8 +190,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 }, // Shadow offset (for iOS)
     shadowOpacity: 0.3, // Shadow opacity (for iOS)
     shadowRadius: 3, // Shadow radius (for iOS)
-
-   
   },
   optionsContainer: {
     flexDirection: 'row',

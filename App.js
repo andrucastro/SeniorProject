@@ -10,6 +10,7 @@ import Quiz from './screens/Quiz';
 import Login from './screens/Login';
 import Stats from './screens/Stats';
 import SignUp from './screens/SignUp';
+import Settings from './screens/Settings';
 
 
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ export default function App() {
               <Stack.Screen options={{ headerShown: false }} name='Menu' component={Menu}/>
               <Stack.Screen name='Quiz' component={Quiz}/>
               <Stack.Screen name='Stats' component={Stats}/>
+              <Stack.Screen name='Settings' component={Settings}/>
             </>
           ) : (
             <>
