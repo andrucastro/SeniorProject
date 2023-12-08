@@ -10,18 +10,17 @@ import {
 import { StyleSheet } from 'react-native';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import { update, ref, set } from 'firebase/database';
+import { update, ref } from 'firebase/database';
 
 function Quiz({ navigation }) {
-  const [words, setWords] = useState([]); // Array of words from the database
-  const [currentWordIndex, setCurrentWordIndex] = useState(0); //Current words is asked
+  const [words, setWords] = useState(null); // Array of words from the database
+  const [currentWordIndex, setCurrentWordIndex] = useState(0); // Current word being asked
   const [answer, setAnswer] = useState(''); // User input answer
-  const [correct, setCorrect] = useState(false); // State correct or wrong answer
-  const [displayMessageBlock, setDisplayMessageBlock] = useState(false); // Display message correct or incorrect
+  const [correct, setCorrect] = useState(false); // State for correct or wrong answer
+  const [displayMessageBlock, setDisplayMessageBlock] = useState(false); // Display message for correct or incorrect
   const [displayMessage, setDisplayMessage] = useState(''); // Display or hide feedback box
-  const [showWordDate, setShowWordDate] = useState(''); // Date will be asked next time
-  const [wordDate, setWordDate] = useState(''); // Date will be asked stored in database
-  const [endquiz, setEndquiz] = useState(false); // Date will be asked stored in database
+  const [showWordDate, setShowWordDate] = useState(''); // Date the word will be asked next time
+  const [wordDate, setWordDate] = useState(''); // Date the word was asked, stored in the database
 
   const feedbackBoxBottom = useRef(new Animated.Value(-100)).current;
 
@@ -36,7 +35,7 @@ function Quiz({ navigation }) {
         const specificUserId = FIREBASE_AUTH.currentUser.uid;
         const currentDate = new Date();
 
-        const result = Object.keys(data)
+        let result = Object.keys(data)
           .filter(
             (key) =>
               data[key].userId === specificUserId &&
@@ -62,64 +61,83 @@ function Quiz({ navigation }) {
   }, []);
 
   function askQuestion() {
-    // check if the answer is correct
+    // Check if the answer is correct
     if (words[currentWordIndex]?.word === answer) {
-        const currentDate = new Date();
+      var currentDate = new Date();
 
       switch (words[currentWordIndex].hits) {
-        case 1:
+        case 0:
           currentDate.setDate(currentDate.getDate() + 1);
+          console.log(currentDate);
           setShowWordDate(currentDate.toString());
-          setWordDate(currentDate.toString());
+          break;
+
+        case 1:
+          currentDate.setDate(currentDate.getDate() + 2);
+          console.log(currentDate);
+          setShowWordDate(currentDate.toString());
           break;
 
         case 2:
-          currentDate.setDate(currentDate.getDate() + 2);
+          currentDate.setDate(currentDate.getDate() + 3);
           setShowWordDate(currentDate.toString());
-          setWordDate(currentDate.toString());
           break;
 
         case 3:
           currentDate.setDate(currentDate.getDate() + 5);
           setShowWordDate(currentDate.toString());
-          setWordDate(currentDate.toString());
           break;
 
         case 4:
           currentDate.setDate(currentDate.getDate() + 10);
           setShowWordDate(currentDate.toString());
-          setWordDate(currentDate.toString());
           break;
       }
 
-      // set the message to display in the feedback box
+      // Update the word in the database
+      try {
+        console.log(wordDate);
+        update(ref(db, 'words/' + words[currentWordIndex].id), {
+          hits: words[currentWordIndex].hits + 1,
+          date: currentDate,
+        }).catch((error) => {
+          console.log(error);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      // Set the message to display in the feedback box
       setCorrect(true);
       showFeedback('Correct!');
     }
-    // check if the answer is wrong
+    // Check if the answer is wrong
     else {
       setCorrect(false);
       showFeedback('Incorrect!');
-      const currentDate = new Date(); // set today date
-      setShowWordDate(currentDate.toDateString()); // set the date to display in the feedback box
-      setWordDate(currentDate.toString());// set the date to store in the database
+      const currentDate = new Date(); // Set today's date
+      setShowWordDate(currentDate.toDateString()); // Set the date to display in the feedback box
+      
 
-    // update the word in the database
-    try {
-      console.log(wordDate);
-      update(ref(db, 'words/' + words[currentWordIndex].id), {
-        hits: words[currentWordIndex].hits + 1,
-        date: wordDate,
-      });
-    } catch (error) {
-      console.log(error);
+      // Update the word in the database
+      try {
+        console.log(wordDate);
+        update(ref(db, 'words/' + words[currentWordIndex].id), {
+          hits: words[currentWordIndex].hits + 1,
+          date: currentDate,
+        }).catch((error) => {
+          console.log(error);
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
   const handleNextWord = () => {
     const nextIndex = (currentWordIndex + 1) % words.length;
     setCurrentWordIndex(nextIndex);
-    // close the feedback box
+    // Close the feedback box
     hideFeedback();
   };
 
@@ -155,17 +173,18 @@ function Quiz({ navigation }) {
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
-        {words.length > 0 ? (
+        {words && words.length > 0 ? (
           <>
             <Text style={styles.heading}>Type the Translation</Text>
             <Text style={styles.word}>{words[currentWordIndex]?.answer}</Text>
 
-            {/* show the user the correct answer */}
-            {displayMessageBlock && words[currentWordIndex]?.word !== answer && (
-              <Text style={styles.wordFeedback}>
-                {words[currentWordIndex]?.word}
-              </Text>
-            )}
+            {/* Show the user the correct answer */}
+            {displayMessageBlock &&
+              words[currentWordIndex]?.word !== answer && (
+                <Text style={styles.wordFeedback}>
+                  {words[currentWordIndex]?.word}
+                </Text>
+              )}
 
             <TextInput
               style={styles.response}
@@ -179,7 +198,10 @@ function Quiz({ navigation }) {
 
             <TouchableOpacity
               style={styles.btn_next}
-              onPress={() => { setDisplayMessageBlock(false); handleNextWord()}}
+              onPress={() => {
+                setDisplayMessageBlock(false);
+                handleNextWord();
+              }}
             >
               <Text style={styles.btn_text}>Next Word</Text>
             </TouchableOpacity>
@@ -194,10 +216,10 @@ function Quiz({ navigation }) {
               >
                 <Text style={styles.animationText}>{displayMessage}</Text>
                 <Text style={styles.date}>
-                  Will be ask again in {showWordDate}
+                  Will be asked again in {showWordDate}
                 </Text>
                 <Text style={styles.date}>
-                  Hits: {words[currentWordIndex]?.hits}{' '}
+                  Hits: {words[currentWordIndex]?.hits + 1}{' '}
                 </Text>
               </Animated.View>
             )}
@@ -329,6 +351,5 @@ const styles = StyleSheet.create({
     color: '#E55454',
   },
 });
-}
 
 export default Quiz;

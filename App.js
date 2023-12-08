@@ -11,6 +11,7 @@ import Login from './screens/Login';
 import Stats from './screens/Stats';
 import SignUp from './screens/SignUp';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -19,7 +20,7 @@ export default function App() {
 
   useEffect(()=>{
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('user', user);
+      // console.log('user', user);
       setUser(user);
     });
   },[])
@@ -30,13 +31,13 @@ export default function App() {
 
           {user ? (
             <>
-              <Stack.Screen name='Menu' component={Menu}/>
+              <Stack.Screen options={{ headerShown: false }} name='Menu' component={Menu}/>
               <Stack.Screen name='Quiz' component={Quiz}/>
               <Stack.Screen name='Stats' component={Stats}/>
             </>
           ) : (
             <>
-              <Stack.Screen name='Login' component={Login}/>
+              <Stack.Screen options={{ headerShown: false }} name='Login' component={Login}/>
               <Stack.Screen name='SignUp' component={SignUp}/>
             </>
           )}      

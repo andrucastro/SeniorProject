@@ -10,7 +10,6 @@ import {
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import { child, push, ref, set } from 'firebase/database';
-import { logedInUser } from '../App';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Quiz from './Quiz';
 import Stats from './Stats';
