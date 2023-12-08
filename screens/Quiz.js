@@ -22,6 +22,10 @@ function Quiz({ navigation }) {
   const [showWordDate, setShowWordDate] = useState(''); // Date the word will be asked next time
   const [wordDate, setWordDate] = useState(''); // Date the word was asked, stored in the database
 
+  // Final Stats 
+  const [rightAnswers, setWrongAnswers] = useState(0)
+
+  // animations 
   const feedbackBoxBottom = useRef(new Animated.Value(-100)).current;
 
   useEffect(() => {
@@ -168,6 +172,12 @@ function Quiz({ navigation }) {
   };
 
   return (
+
+    // end the quiz after 5 questions 
+    <>
+    {currentWordIndex < 4 ? (
+
+
     <ImageBackground
       source={require('../assets/quiz/quizbg.png')}
       style={styles.backgroundImage}
@@ -243,6 +253,14 @@ function Quiz({ navigation }) {
         )}
       </View>
     </ImageBackground>
+    ):(
+      <View>
+        <Text>End of the quiz</Text>
+      </View>
+    )
+    
+    }
+    </>
   );
 }
 

@@ -30,7 +30,7 @@ export default function Settings({ navigation }) {
   // Get Word from API
   useEffect(() => {
     fetchAndTransform();
-  }, []);
+  }, [words]);
 
   return (
     <View style={styles.container}>
@@ -42,14 +42,15 @@ export default function Settings({ navigation }) {
             <View style={styles.row}>
               <View key={wordItem.id}>
                 <Text style={styles.word}>Word: {wordItem.word}</Text>
-                <Text style={styles.answer}>Answer: {wordItem.answer}</Text>
+                <Text style={styles.answer}>Translation: {wordItem.answer}</Text>
                 {/* You can add additional styling or components as needed */}
               </View>
               <View>
                 <TouchableOpacity
+                  key={wordItem.id}
                   onPress={() => {
                     console.log('Navigating to Edit');
-                    navigation.navigate('Edit', {
+                    navigation.navigate('Edit Word', {
                       word: wordItem.word,
                       answer: wordItem.answer,
                       id: wordItem.id,

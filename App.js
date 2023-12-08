@@ -11,6 +11,7 @@ import Login from './screens/Login';
 import Stats from './screens/Stats';
 import SignUp from './screens/SignUp';
 import Settings from './screens/Settings';
+import EditWord from './screens/EditWord';
 
 
 const Stack = createNativeStackNavigator();
@@ -36,6 +37,7 @@ export default function App() {
               <Stack.Screen name='Quiz' component={Quiz}/>
               <Stack.Screen name='Stats' component={Stats}/>
               <Stack.Screen name='Settings' component={Settings}/>
+              <Stack.Screen name='Edit Word' component={EditWord}/>
             </>
           ) : (
             <>
