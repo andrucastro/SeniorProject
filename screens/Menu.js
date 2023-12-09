@@ -11,7 +11,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import { child, push, ref, set, onValue} from 'firebase/database';
-import {profilePic} from '../assets/profilePic'
+import {images} from '../assets/profilePic';
 
 
 function Menu({ navigation }) {
@@ -84,9 +84,9 @@ function Menu({ navigation }) {
     <View style={styles.container}>
       <View style={styles.userBanner}>
           <Text style={styles.nickName}> Welcome {userInfo?.nickName}</Text>
-          <View>
-           
-          </View> 
+          <View style={styles.picContainer}>
+              <Image style={styles.profilePic} source={images.avatar[1]}></Image>
+          </View>
         </View>
       <View style={styles.optionsContainer}>
         <View style={styles.quiz}>
@@ -197,11 +197,22 @@ const styles = StyleSheet.create({
     paddingTop: 100,
   },
   userBanner:{
+    flexDirection: 'row',
+    justifyContent:'space-between',
     marginBottom:20
   },
   nickName:{
     fontSize:20,
     fontWeight:'500'
+  },
+  picContainer:{
+    height:50,
+    width:50,
+  },
+  profilePic:{
+    flex: 1,
+    resizeMode: 'contain',
+    width: '100%',
   },
   icon:{
     marginBottom:10,
