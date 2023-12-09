@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import { update, ref, remove } from 'firebase/database';
 import { db } from '../firebaseConfig';
 
@@ -41,15 +48,30 @@ export default function EditWord({ route, navigation }) {
 
       <View>
         <View>
-          <Text>New Word:</Text>
-          <TextInput onChangeText={setNewWord} value={newWord} />
+          <Text style={styles.text}>Word</Text>
+          <TextInput
+            style={styles.word}
+            onChangeText={setNewWord}
+            value={newWord}
+          />
         </View>
         <View>
-          <Text>Translation:</Text>
-          <TextInput onChangeText={setNewAnswer} value={newAnswer} />
+          <Text style={styles.text}>Translation</Text>
+          <TextInput
+            style={styles.translation}
+            onChangeText={setNewAnswer}
+            value={newAnswer}
+          />
         </View>
-        <Button title="Update Word" onPress={updateWord} />
-        <Button title="Delete Word" onPress={deleteWord} color="red" />
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.btn} onPress={updateWord}>
+            <Text style={styles.btn_text}>Update</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.btn_delete} onPress={deleteWord}>
+            <Text style={styles.btn_text}>Delete</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -58,23 +80,52 @@ export default function EditWord({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 40,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 27,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginTop: 40,
+    marginBottom: 40,
+    textAlign: 'center',
   },
-  successMessage: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'green',
-    padding: 16,
+  word: {
+    backgroundColor: 'white',
+    fontSize: 20,
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 10,
   },
-  successText: {
+  translation: {
+    backgroundColor: 'white',
+    fontSize: 20,
+    padding: 10,
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  btn: {
+    backgroundColor: '#65C9CF',
+    paddingVertical: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 50,
+  },
+  btn_text: {
+    fontWeight: '700',
+    textAlign: 'center',
+    fontSize: 19,
     color: 'white',
-    fontWeight: 'bold',
   },
+  btnContainer:{
+    marginTop:80,
+  },
+  btn_delete:{
+    backgroundColor: '#E55454',
+    paddingVertical: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 50,
+  }
 });
