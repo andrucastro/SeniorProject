@@ -25,6 +25,10 @@ function Quiz({ navigation }) {
   // Final Stats
   const [rightAnswers, setRightAnswers] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState(['1']);
+  function doSomething(){
+    navigation.navigate('Menu')
+  }
+ 
 
   // Function to add a new word to the array of wrongAnswers
   const addWrongAnswer = (word) => {
@@ -188,7 +192,7 @@ function Quiz({ navigation }) {
           style={styles.backgroundImage}
         >
           <View style={styles.container}>
-            {words && words.length > 0 ? (
+            {words && words.length > 5 ? (
               <>
                 <Text style={styles.heading}>Type the Translation</Text>
                 <Text style={styles.word}>
@@ -221,6 +225,7 @@ function Quiz({ navigation }) {
                   onPress={() => {
                     setDisplayMessageBlock(false);
                     handleNextWord();
+                    setAnswer('');
                   }}
                 >
                   <Text style={styles.btn_text}>Next Word</Text>
@@ -263,7 +268,7 @@ function Quiz({ navigation }) {
                   later.
                 </Text>
                 <Text style={styles.noWordsText2}>
-                  Please add at least 3 new words to start a quiz
+                  Please add at least 5 new words to start a quiz
                 </Text>
 
                 <TouchableOpacity
@@ -277,9 +282,9 @@ function Quiz({ navigation }) {
           </View>
         </ImageBackground>
       ) : (
-        <View>
-          <Text>End of the quiz</Text>
-          <Text>{rightAnswers}</Text>
+        <View style={styles.container}>
+          <Text style={styles.end}>End of the quiz</Text>
+          {doSomething()}
         </View>
       )}
     </>
@@ -391,6 +396,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: '#E55454',
   },
+  end:{
+    fontSize: 40,
+    textAlign:'center',
+    fontWeight:'600'
+  }
 });
 
 export default Quiz;
