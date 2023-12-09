@@ -85,7 +85,7 @@ function Menu({ navigation }) {
       <View style={styles.userBanner}>
           <Text style={styles.nickName}> Welcome {userInfo?.nickName}</Text>
           <View>
-            <Image> </Image>
+           
           </View> 
         </View>
       <View style={styles.optionsContainer}>
