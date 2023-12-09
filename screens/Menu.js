@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 import { child, push, ref, set, onValue} from 'firebase/database';
@@ -119,13 +118,15 @@ function Menu({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.quiz}>
+        <TouchableOpacity style={styles.quiz}
+        onPress={()=>{navigation.navigate('UserProfile')}}
+        >
           <Image
             source={require('../assets/menu/profile.png')}
             style={styles.icon}
           ></Image>
           <Text style={styles.tagProfile}>Profile</Text>
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.quiz}>
         <TouchableOpacity

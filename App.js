@@ -15,6 +15,7 @@ import SignUp from './screens/SignUp';
 import Settings from './screens/Settings';
 import EditWord from './screens/EditWord';
 import SignUp2 from './screens/SignUp2';
+import UserProfile from './screens/UserProfile';
 
 
 const Stack = createNativeStackNavigator();
@@ -41,7 +42,8 @@ export default function App() {
             <Stack.Screen name='Stats' component={Stats} />
             <Stack.Screen name='Settings' component={Settings} />
             <Stack.Screen name='Edit Word' component={EditWord} />
-            <Stack.Screen name='SignUp2' component={SignUp2} />
+            <Stack.Screen options={{ headerShown: false }} name='SignUp2' component={SignUp2} />
+            <Stack.Screen name='UserProfile' component={UserProfile} />
           </>
         ) : (
           <>
