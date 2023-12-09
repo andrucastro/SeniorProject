@@ -85,7 +85,7 @@ function Menu({ navigation }) {
       <View style={styles.userBanner}>
           <Text style={styles.nickName}> Welcome {userInfo?.nickName}</Text>
           <View style={styles.picContainer}>
-              <Image style={styles.profilePic} source={images.avatar[1]}></Image>
+              <Image style={styles.profilePic} source={images.avatar[userInfo?.avatar]}></Image>
           </View>
         </View>
       <View style={styles.optionsContainer}>
@@ -194,11 +194,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F1F1F1',
     paddingHorizontal: 30,
-    paddingTop: 100,
+    paddingTop: 80,
   },
   userBanner:{
     flexDirection: 'row',
     justifyContent:'space-between',
+    alignItems:'center',
     marginBottom:20
   },
   nickName:{
@@ -206,8 +207,9 @@ const styles = StyleSheet.create({
     fontWeight:'500'
   },
   picContainer:{
-    height:50,
-    width:50,
+    height:60,
+    width:60,
+    marginRight:10,
   },
   profilePic:{
     flex: 1,

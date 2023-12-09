@@ -15,7 +15,6 @@ export default function EditWord({ route, navigation }) {
         word: newWord,
         answer: newAnswer,
       });
-      console.log('Word Updated Successfully!');
       navigation.goBack();
     } catch (error) {
       console.log(error);

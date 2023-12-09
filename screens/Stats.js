@@ -2,11 +2,22 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { FIREBASE_AUTH } from '../firebaseConfig';
+import { child, push, ref, set, onValue} from 'firebase/database';
+import { db } from '../firebaseConfig';
 
 function Stats({ navigation }) {
   const [words, setWords] = useState([]);
   const [totalWords, setTotalWords] = useState(0);
   const [wordsLearned, setWordsLearned] = useState(0);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(()=>{
+    const test = ref(db, `users/`+ FIREBASE_AUTH.currentUser.uid);
+    onValue(test, (snapshot)=>{
+      const data = snapshot.val()
+      setUserInfo(data)
+    })
+},[])
 
   async function fetchAndTransform() {
     try {
@@ -44,6 +55,7 @@ function Stats({ navigation }) {
   return (
     <View style={styles.container}>
       <View>
+      <Text style={styles.text}>Words Learned</Text>
         <View style={styles.row}>
           <Image
             source={require('../assets/stats/brain.png')}
@@ -51,6 +63,7 @@ function Stats({ navigation }) {
           ></Image>
           <Text style={styles.number}>{wordsLearned}</Text>
         </View>
+        <Text style={styles.text}>Total Words</Text>
         <View style={styles.row}>
           <Image
             source={require('../assets/stats/totalw.png')}
@@ -58,12 +71,13 @@ function Stats({ navigation }) {
           ></Image>
           <Text style={styles.number}>{totalWords}</Text>
         </View>
+        <Text style={styles.text}>Total Points</Text>
         <View style={styles.row}>
           <Image
             source={require('../assets/stats/points.png')}
             style={styles.icon}
           ></Image>
-          <Text>100</Text>
+          <Text style={styles.number}>{userInfo?.score}</Text>
         </View>
       </View>
       <View>
@@ -100,6 +114,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 19,
     color: 'white',
+  },
+  text:{
+    fontSize:20,
+    marginBottom:10,
+    fontWeight:'600'
   },
   row: {
     flexDirection: 'row',

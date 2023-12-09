@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 
 export default function Settings({ navigation }) {
@@ -20,7 +20,6 @@ export default function Settings({ navigation }) {
           ...data[key],
         }));
 
-      console.log(result);
       setWords(result);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -48,8 +47,7 @@ export default function Settings({ navigation }) {
               <View>
                 <TouchableOpacity
                   key={wordItem.id}
-                  onPress={() => {
-                    console.log('Navigating to Edit');
+                  onPress={() => {  1
                     navigation.navigate('Edit Word', {
                       word: wordItem.word,
                       answer: wordItem.answer,
@@ -57,7 +55,7 @@ export default function Settings({ navigation }) {
                     });
                   }}
                 >
-                  <Text>Edit</Text>
+                  <Image source={require('../assets/edit.png')}></Image>
                 </TouchableOpacity>
               </View>
             </View>
