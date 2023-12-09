@@ -84,7 +84,7 @@ function Menu({ navigation }) {
               style={styles.icon}
             ></Image>
           </TouchableOpacity>
-          <Text>Quiz</Text>
+          <Text style={styles.tagQuiz}>Quiz</Text>
         </View>
 
         <View style={styles.quiz}>
@@ -98,6 +98,7 @@ function Menu({ navigation }) {
               source={require('../assets/menu/stats.png')}
               style={styles.icon}
             ></Image>      
+            <Text style={styles.tagStats}>Settings</Text>
           </TouchableOpacity>
         </View>
 
@@ -106,7 +107,7 @@ function Menu({ navigation }) {
             source={require('../assets/menu/profile.png')}
             style={styles.icon}
           ></Image>
-          <Text>Profile</Text>
+          <Text style={styles.tagProfile}>Profile</Text>
         </View>
 
         <View style={styles.quiz}>
@@ -120,7 +121,7 @@ function Menu({ navigation }) {
             source={require('../assets/menu/settings.png')}
             style={styles.icon}
           ></Image>
-          <Text>Settings</Text>
+          <Text style={styles.tagSettings}>Settings</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -177,6 +178,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F1F1',
     paddingHorizontal: 30,
     paddingTop: 150,
+  },
+  icon:{
+    marginBottom:10,
+  },
+  tagQuiz:{
+    fontSize:18,
+    textAlign: 'center',
+    fontWeight:'600',
+    color:'#65C9CF'
+  },
+  tagStats:{
+    fontSize:18,
+    textAlign: 'center',
+    fontWeight:'600',
+    color:'#F7AA24'
+  },
+  tagProfile:{
+    fontSize:18,
+    textAlign: 'center',
+    fontWeight:'600',
+    color:'#E55454'
+  },
+  tagSettings:{
+    fontSize:18,
+    textAlign: 'center',
+    fontWeight:'600',
+    color:'#444444'
   },
   quiz: {
     justifyContent: 'center',

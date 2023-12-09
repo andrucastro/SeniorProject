@@ -23,7 +23,14 @@ function Quiz({ navigation }) {
   const [wordDate, setWordDate] = useState(''); // Date the word was asked, stored in the database
 
   // Final Stats 
-  const [rightAnswers, setWrongAnswers] = useState(0)
+  const [rightAnswers, setRightAnswers] = useState(0)
+  const [wrongAnswers, setWrongAnswers] = useState(["1"])
+
+  // Function to add a new word to the array of wrongAnswers
+  const addWrongAnswer = (word) => {
+    setWrongAnswers(wrongAnswers => [...wrongAnswers, word]);
+    console.log(wrongAnswers)
+  };
 
   // animations 
   const feedbackBoxBottom = useRef(new Animated.Value(-100)).current;
@@ -67,9 +74,12 @@ function Quiz({ navigation }) {
   function askQuestion() {
     // Check if the answer is correct
     if (words[currentWordIndex]?.word === answer) {
+
+      setRightAnswers(wordDate + 1);
       var currentDate = new Date();
 
       switch (words[currentWordIndex].hits) {
+
         case 0:
           currentDate.setDate(currentDate.getDate() + 1);
           console.log(currentDate);
@@ -117,11 +127,12 @@ function Quiz({ navigation }) {
     }
     // Check if the answer is wrong
     else {
+      addWrongAnswer(words[currentWordIndex].word);
       setCorrect(false);
       showFeedback('Incorrect!');
       const currentDate = new Date(); // Set today's date
       setShowWordDate(currentDate.toDateString()); // Set the date to display in the feedback box
-      
+  
 
       // Update the word in the database
       try {
@@ -256,6 +267,7 @@ function Quiz({ navigation }) {
     ):(
       <View>
         <Text>End of the quiz</Text>
+        <Text>{rightAnswers}</Text>
       </View>
     )
     
@@ -315,6 +327,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 19,
     color: 'white',
+    fontWeight:'bold',
   },
   feedbackBoxRight: {
     bottom: -100,
