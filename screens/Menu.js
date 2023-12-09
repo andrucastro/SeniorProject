@@ -7,21 +7,32 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import { child, push, ref, set } from 'firebase/database';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import Quiz from './Quiz';
-import Stats from './Stats';
+import { child, push, ref, set, onValue} from 'firebase/database';
+import {profilePic} from '../assets/profilePic'
+
 
 function Menu({ navigation }) {
   // Conditional for display view
   const [insertWord, setInsertWord] = useState(true);
   const [insertAnswer, setInsertAnswer] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
 
   // Conditional for entering new words
   const [newWord, setNewWord] = useState('');
   const [answer, setAnswer] = useState('');
+
+
+  useEffect(()=>{
+      const test = ref(db, `users/`+ FIREBASE_AUTH.currentUser.uid);
+      onValue(test, (snapshot)=>{
+        const data = snapshot.val()
+        setUserInfo(data)
+      })
+  },[])
+
 
   function saveWord() {
     // Create key
@@ -71,6 +82,12 @@ function Menu({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.userBanner}>
+          <Text style={styles.nickName}> Welcome {userInfo?.nickName}</Text>
+          <View>
+            <Image> </Image>
+          </View> 
+        </View>
       <View style={styles.optionsContainer}>
         <View style={styles.quiz}>
           <TouchableOpacity
@@ -177,7 +194,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F1F1F1',
     paddingHorizontal: 30,
-    paddingTop: 150,
+    paddingTop: 100,
+  },
+  userBanner:{
+    marginBottom:20
+  },
+  nickName:{
+    fontSize:20,
+    fontWeight:'500'
   },
   icon:{
     marginBottom:10,

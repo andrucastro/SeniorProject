@@ -17,8 +17,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { db } from '../firebaseConfig';
-import { update, ref, set } from 'firebase/database';
+
 
 function SignUp({ navigation }) {
 

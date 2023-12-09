@@ -24,35 +24,29 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [nickName, setNickName] = useState(null);
 
-  useEffect(() => {
+  useEffect(()=>{
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
-      // console.log(user)
-      // const test = ref(db, 'users/' + user.uid);
-      // onValue(test, (snapshot)=>{
-      //   const data = snapshot.val()
-      //   setNickName(data.nickName)
-      // })
-    
-  });
-  }, [])
+    });
+  },[])
+
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='login'>
-        {user && nickName ? (
+        {user ? (
           <>
             <Stack.Screen options={{ headerShown: false }} name='Menu' component={Menu} />
             <Stack.Screen name='Quiz' component={Quiz} />
             <Stack.Screen name='Stats' component={Stats} />
             <Stack.Screen name='Settings' component={Settings} />
             <Stack.Screen name='Edit Word' component={EditWord} />
+            <Stack.Screen name='SignUp2' component={SignUp2} />
           </>
         ) : (
           <>
             <Stack.Screen options={{ headerShown: false }} name='Login' component={Login} />
             <Stack.Screen name='SignUp' component={SignUp} />
-            <Stack.Screen name='SignUp2' component={SignUp2} />
           </>
         )}
       </Stack.Navigator>

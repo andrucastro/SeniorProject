@@ -22,17 +22,17 @@ function Quiz({ navigation }) {
   const [showWordDate, setShowWordDate] = useState(''); // Date the word will be asked next time
   const [wordDate, setWordDate] = useState(''); // Date the word was asked, stored in the database
 
-  // Final Stats 
-  const [rightAnswers, setRightAnswers] = useState(0)
-  const [wrongAnswers, setWrongAnswers] = useState(["1"])
+  // Final Stats
+  const [rightAnswers, setRightAnswers] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState(['1']);
 
   // Function to add a new word to the array of wrongAnswers
   const addWrongAnswer = (word) => {
-    setWrongAnswers(wrongAnswers => [...wrongAnswers, word]);
-    console.log(wrongAnswers)
+    setWrongAnswers((wrongAnswers) => [...wrongAnswers, word]);
+    console.log(wrongAnswers);
   };
 
-  // animations 
+  // animations
   const feedbackBoxBottom = useRef(new Animated.Value(-100)).current;
 
   useEffect(() => {
@@ -74,12 +74,10 @@ function Quiz({ navigation }) {
   function askQuestion() {
     // Check if the answer is correct
     if (words[currentWordIndex]?.word === answer) {
-
       setRightAnswers(wordDate + 1);
       var currentDate = new Date();
 
       switch (words[currentWordIndex].hits) {
-
         case 0:
           currentDate.setDate(currentDate.getDate() + 1);
           console.log(currentDate);
@@ -132,13 +130,12 @@ function Quiz({ navigation }) {
       showFeedback('Incorrect!');
       const currentDate = new Date(); // Set today's date
       setShowWordDate(currentDate.toDateString()); // Set the date to display in the feedback box
-  
 
       // Update the word in the database
       try {
         console.log(wordDate);
         update(ref(db, 'words/' + words[currentWordIndex].id), {
-          hits: words[currentWordIndex].hits + 1,
+          hits: 0,
           date: currentDate,
         }).catch((error) => {
           console.log(error);
@@ -183,95 +180,108 @@ function Quiz({ navigation }) {
   };
 
   return (
-
-    // end the quiz after 5 questions 
+    // end the quiz after 5 questions
     <>
-    {currentWordIndex < 4 ? (
-
-
-    <ImageBackground
-      source={require('../assets/quiz/quizbg.png')}
-      style={styles.backgroundImage}
-    >
-      <View style={styles.container}>
-        {words && words.length > 0 ? (
-          <>
-            <Text style={styles.heading}>Type the Translation</Text>
-            <Text style={styles.word}>{words[currentWordIndex]?.answer}</Text>
-
-            {/* Show the user the correct answer */}
-            {displayMessageBlock &&
-              words[currentWordIndex]?.word !== answer && (
-                <Text style={styles.wordFeedback}>
-                  {words[currentWordIndex]?.word}
+      {currentWordIndex < 4 ? (
+        <ImageBackground
+          source={require('../assets/quiz/quizbg.png')}
+          style={styles.backgroundImage}
+        >
+          <View style={styles.container}>
+            {words && words.length > 0 ? (
+              <>
+                <Text style={styles.heading}>Type the Translation</Text>
+                <Text style={styles.word}>
+                  {words[currentWordIndex]?.answer}
                 </Text>
-              )}
 
-            <TextInput
-              style={styles.response}
-              placeholder="Type the translation"
-              onChangeText={setAnswer}
-              value={answer}
-            />
-            <TouchableOpacity style={styles.btn} onPress={() => askQuestion()}>
-              <Text style={styles.btn_text}>Send Response</Text>
-            </TouchableOpacity>
+                {/* Show the user the correct answer */}
+                {displayMessageBlock &&
+                  words[currentWordIndex]?.word !== answer && (
+                    <Text style={styles.wordFeedback}>
+                      {words[currentWordIndex]?.word}
+                    </Text>
+                  )}
 
-            <TouchableOpacity
-              style={styles.btn_next}
-              onPress={() => {
-                setDisplayMessageBlock(false);
-                handleNextWord();
-              }}
-            >
-              <Text style={styles.btn_text}>Next Word</Text>
-            </TouchableOpacity>
+                <TextInput
+                  style={styles.response}
+                  placeholder="Type the translation"
+                  onChangeText={setAnswer}
+                  value={answer}
+                />
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={() => askQuestion()}
+                >
+                  <Text style={styles.btn_text}>Send Response</Text>
+                </TouchableOpacity>
 
-            {displayMessageBlock && (
-              <Animated.View
-                style={
-                  correct
-                    ? [styles.feedbackBoxRight, { bottom: feedbackBoxBottom }]
-                    : [styles.feedbackBoxWrong, { bottom: feedbackBoxBottom }]
-                }
-              >
-                <Text style={styles.animationText}>{displayMessage}</Text>
-                <Text style={styles.date}>
-                  Will be asked again in {showWordDate}
+                <TouchableOpacity
+                  style={styles.btn_next}
+                  onPress={() => {
+                    setDisplayMessageBlock(false);
+                    handleNextWord();
+                  }}
+                >
+                  <Text style={styles.btn_text}>Next Word</Text>
+                </TouchableOpacity>
+
+                {displayMessageBlock && (
+                  <Animated.View
+                    style={
+                      correct
+                        ? [
+                            styles.feedbackBoxRight,
+                            { bottom: feedbackBoxBottom },
+                          ]
+                        : [
+                            styles.feedbackBoxWrong,
+                            { bottom: feedbackBoxBottom },
+                          ]
+                    }
+                  >
+                    <Text style={styles.animationText}>{displayMessage}</Text>
+                    <Text style={styles.date}>
+                      Will be asked again in {showWordDate}
+                    </Text>
+                    {correct ? (
+                      <Text style={styles.date}>
+                        Hits: {words[currentWordIndex]?.hits + 1}{' '}
+                      </Text>
+                    ) : (
+                      <Text style={styles.date}>
+                        Hits: {words[currentWordIndex]?.hits}{' '}
+                      </Text>
+                    )}
+                  </Animated.View>
+                )}
+              </>
+            ) : (
+              <View style={styles.noWordsContainer}>
+                <Text style={styles.noWordsText}>
+                  No words to practice. Please add more words or come back
+                  later.
                 </Text>
-                <Text style={styles.date}>
-                  Hits: {words[currentWordIndex]?.hits + 1}{' '}
+                <Text style={styles.noWordsText2}>
+                  Please add at least 3 new words to start a quiz
                 </Text>
-              </Animated.View>
+
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={() => navigation.navigate('Menu')}
+                >
+                  <Text style={styles.btn_text}>Go to Menu</Text>
+                </TouchableOpacity>
+              </View>
             )}
-          </>
-        ) : (
-          <View style={styles.noWordsContainer}>
-            <Text style={styles.noWordsText}>
-              No words to practice. Please add more words or come back later.
-            </Text>
-            <Text style={styles.noWordsText2}>
-              Please add at least 3 new words to start a quiz
-            </Text>
-
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => navigation.navigate('Menu')}
-            >
-              <Text style={styles.btn_text}>Go to Menu</Text>
-            </TouchableOpacity>
           </View>
-        )}
-      </View>
-    </ImageBackground>
-    ):(
-      <View>
-        <Text>End of the quiz</Text>
-        <Text>{rightAnswers}</Text>
-      </View>
-    )
-    
-    }
+        </ImageBackground>
+      ) : (
+        <View>
+          <Text>End of the quiz</Text>
+          <Text>{rightAnswers}</Text>
+        </View>
+      )}
     </>
   );
 }
@@ -327,7 +337,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 19,
     color: 'white',
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   feedbackBoxRight: {
     bottom: -100,

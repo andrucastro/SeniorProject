@@ -14,7 +14,8 @@ import { useState} from 'react';
 import { StyleSheet } from 'react-native';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import { update, ref, set } from 'firebase/database';
+import { set, ref } from 'firebase/database';
+import {profilePic} from '../assets/profilePic'
 
 function SignUp2({ navigation }) {
   const [nickName, setNickName] = useState('');
@@ -38,15 +39,21 @@ function SignUp2({ navigation }) {
 
 
   // ADD USER TO A DATABASE COLlECTION
-    const addUser = ()=>{
-      set(ref(db, 'users/' + FIREBASE_AUTH.currentUser.uid), {
-          nickName: nickName,
-          email: FIREBASE_AUTH.currentUser.email,
-          avatar:selectedPic,
-          score:0,
-        });
-        navigation.navigate('Menu')
+  const addUser = () => {
+    try{
+      const userRef = ref(db, 'users/' + FIREBASE_AUTH.currentUser.uid);
+      set(userRef, {
+        nickName: nickName,
+        email: FIREBASE_AUTH.currentUser.email,
+        avatar: selectedPic,
+        score: 0,
+      });
+    }catch(error){
+      console.log(error)
     }
+   
+    navigation.navigate('Menu');
+  };
 
 
   return (
